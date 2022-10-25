@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ActivityIndicator, Pressable, StyleSheet, Text, useWindowDimensions, Vibration, View, Alert, Keyboard } from 'react-native';
 import NfcManager, { NfcTech } from 'react-native-nfc-manager';
+import AnimatedViewOpacity from './AnimateViewOpacity'
 
 type HomeNFCScanProps = {
   scanning: boolean;
@@ -12,6 +13,8 @@ const HEIGHT_WIDTH_FACTOR = 1.78
 const NFCErrorAlert = (title: string, message:string):void => Alert.alert(title, message, [{ text: 'OK', onPress: () => Keyboard.dismiss() }])
 
 const HomeNFCScan: React.FC<HomeNFCScanProps> = ({ scanning, handleScanningPress, handleNavigateScreenOnSuccess }) => {
+
+  const [showAnimate, setShowAnimate] = useState<boolean>(false)
 
   const handleNfcReadPress = async () => {
     let success:boolean = false;
@@ -36,7 +39,10 @@ const HomeNFCScan: React.FC<HomeNFCScanProps> = ({ scanning, handleScanningPress
     }
 
     if (success) {
-      handleNavigateScreenOnSuccess(data)
+      setShowAnimate(true)
+      setTimeout(() => {
+        handleNavigateScreenOnSuccess(data)
+      }, 2000)
     }
   }
 
@@ -54,7 +60,10 @@ const HomeNFCScan: React.FC<HomeNFCScanProps> = ({ scanning, handleScanningPress
         <Pressable style={styles.pressable} android_ripple={{ color: "#fff" }} onPress={handleNfcReadPress}>
           <View style={styles.vContainer}>
             {
-              scanning ? <ActivityIndicator size="large" /> : <Text style={styles.text}>Scan a tag to get started!</Text>
+              scanning ? 
+                <ActivityIndicator size="large" /> 
+                : showAnimate ? <AnimatedViewOpacity /> : 
+                  <Text style={styles.text}>Scan a tag to get started!</Text>
             }
           </View>
         </Pressable>
