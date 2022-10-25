@@ -25,10 +25,19 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.spaulsteinberg74.navigationtestdev"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "70d9cb84-8fbc-4e17-84b2-45f094fc2a10"
+      }
+    },
+    "plugins": [
+      "react-native-nfc-manager"
+    ]
   }
 }
