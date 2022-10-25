@@ -1,6 +1,7 @@
 import React from 'react'
 import { Text } from '../Themed'
 import { View, Pressable, StyleSheet } from 'react-native'
+import Colors from '../../constants/Colors';
 
 type NFButtonProps = {
     title:string;
@@ -37,13 +38,13 @@ const styles = StyleSheet.create({
         paddingVertical: 12,
         paddingHorizontal: 8,
         elevation: 2,
-        backgroundColor: "red"
+        backgroundColor: Colors.main.background
     },
     pressed: {
         opacity: .7
     },
     text: {
-        color: "#fff",
+        color: Colors.main.text,
         textAlign: 'center'
     },
     disabled: {
