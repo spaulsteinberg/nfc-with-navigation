@@ -43,6 +43,7 @@ const HomeNFCScan: React.FC<HomeNFCScanProps> = ({ scanning, handleScanningPress
       setShowAnimate(true)
       setTimeout(() => {
         handleNavigateScreenOnSuccess(data)
+        setShowAnimate(false)
       }, 2000)
     }
   }
