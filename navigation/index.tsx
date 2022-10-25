@@ -7,6 +7,8 @@ import NotFoundScreen from '../screens/NotFoundScreen';
 import SendDataScreen from '../screens/SendDataScreen';
 import { RootStackParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
+import { Ionicons } from '@expo/vector-icons';
+import Colors from '../constants/Colors';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -22,9 +24,14 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="Landing" component={LandingScreen} />
-      <Stack.Screen name="SendData" component={SendDataScreen} />
+    <Stack.Navigator screenOptions={{
+      headerStyle: { backgroundColor: Colors.main.background },
+        headerTintColor: Colors.main.text,
+        headerTitleAlign: 'center',
+        headerRight: () => <Ionicons name="person-circle-outline" size={30} color="white" />
+    }}>
+      <Stack.Screen name="Landing" component={LandingScreen} options={{title: "Scan Tag"}} />
+      <Stack.Screen name="SendData" component={SendDataScreen} options={{title: "Confirm & Send"}} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
     </Stack.Navigator>
   );
