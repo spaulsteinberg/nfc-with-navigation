@@ -1,24 +1,25 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { ActivityIndicator, Pressable, StyleSheet, Text, useWindowDimensions, Vibration, View, Alert, Keyboard } from 'react-native';
 import NfcManager, { NfcTech } from 'react-native-nfc-manager';
 import AnimatedViewOpacity from './AnimateViewOpacity'
+import { AntDesign } from '@expo/vector-icons';
 
 type HomeNFCScanProps = {
   scanning: boolean;
   handleScanningPress: (d: boolean) => void;
-  handleNavigateScreenOnSuccess: (d:any) => void
+  handleNavigateScreenOnSuccess: (d: any) => void
 }
 const HEIGHT_WIDTH_FACTOR = 1.78
 
-const NFCErrorAlert = (title: string, message:string):void => Alert.alert(title, message, [{ text: 'OK', onPress: () => Keyboard.dismiss() }])
+const NFCErrorAlert = (title: string, message: string): void => Alert.alert(title, message, [{ text: 'OK', onPress: () => Keyboard.dismiss() }])
 
 const HomeNFCScan: React.FC<HomeNFCScanProps> = ({ scanning, handleScanningPress, handleNavigateScreenOnSuccess }) => {
 
   const [showAnimate, setShowAnimate] = useState<boolean>(false)
 
   const handleNfcReadPress = async () => {
-    let success:boolean = false;
-    let data:any = null
+    let success: boolean = false;
+    let data: any = null
     try {
       handleScanningPress(true)
       await NfcManager.requestTechnology(NfcTech.Ndef)
@@ -60,9 +61,13 @@ const HomeNFCScan: React.FC<HomeNFCScanProps> = ({ scanning, handleScanningPress
         <Pressable style={styles.pressable} android_ripple={{ color: "#fff" }} onPress={handleNfcReadPress}>
           <View style={styles.vContainer}>
             {
-              scanning ? 
-                <ActivityIndicator size="large" /> 
-                : showAnimate ? <AnimatedViewOpacity /> : 
+              scanning ?
+                <ActivityIndicator size="large" />
+                : showAnimate ? (
+                  <AnimatedViewOpacity>
+                    <AntDesign name="checkcircle" size={96} color="green" />
+                  </AnimatedViewOpacity>
+                ) :
                   <Text style={styles.text}>Scan a tag to get started!</Text>
             }
           </View>
