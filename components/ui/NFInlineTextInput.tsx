@@ -28,7 +28,8 @@ const styles = StyleSheet.create({
       flex: 1 / 4
     },
     input: {
-      flex: 3/4
+      flex: 3 / 4,
+      fontSize: 16
     }
 })
 

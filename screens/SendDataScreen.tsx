@@ -1,31 +1,31 @@
 import React, { useState } from 'react'
-import { ScrollView, StyleSheet, Button, View } from 'react-native'
-import { Text } from '../components/Themed'
+import { ScrollView, StyleSheet, View } from 'react-native'
 import { NFInlineTextInput } from '../components/ui'
 import NFButton from '../components/ui/NFButton'
 import { RootStackScreenProps } from '../types'
 
 const SendDataScreen = ({ route, navigation }: RootStackScreenProps<'SendData'>) => {
-
-  const [tableStatus, setTableStatus] = useState('')
-  const [tableNumber, setTableNumber] = useState('')
-  const [tableBuserName, setTableBuserName] = useState('')
-
-  /* if (!route.params || !route.params.data) {
+  
+  if (!route.params || !route.params.data) {
     navigation.navigate("Landing")
-  } */
+  }
+
+  const [tableNumber, setTableNumber] = useState(route.params.data)
+  const [tableBuserName, setTableBuserName] = useState('')
+  const [tableStatus, setTableStatus] = useState('')
+
+  const handleConfirmPress = () => {
+    console.log("press")
+  }
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ backgroundColor: "#fff" }}>
       <View style={styles.container}>
-        <NFInlineTextInput label='Table' vStyle={styles.secondaryTextView} iStyle={styles.input} value={tableStatus} onChangeText={setTableStatus} />
+        <NFInlineTextInput label='Table' vStyle={styles.secondaryTextView} iStyle={styles.input}value={tableNumber} onChangeText={setTableNumber} editable={false} />
         <NFInlineTextInput label='Buser' vStyle={styles.secondaryTextView} iStyle={styles.input} value={tableBuserName} onChangeText={setTableBuserName} />
-        <NFInlineTextInput label='Status' vStyle={styles.secondaryTextView} iStyle={styles.input} value={tableNumber} onChangeText={setTableNumber} />
+        <NFInlineTextInput label='Status' vStyle={styles.secondaryTextView} iStyle={styles.input} value={tableStatus} onChangeText={setTableStatus} />
         <View>
-          <Text>time here</Text>
-        </View>
-        <View>
-          <NFButton />
+          <NFButton outerStyle={styles.buttonOuterView} title="Confirm" onPress={handleConfirmPress} />
         </View>
       </View>
     </ScrollView>
@@ -47,6 +47,9 @@ const styles = StyleSheet.create({
   secondaryTextView: {
     marginVertical: 12
   },
+  buttonOuterView: {
+    marginVertical: 24
+  }
 })
 
 export default SendDataScreen
