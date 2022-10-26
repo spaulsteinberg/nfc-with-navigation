@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { ScrollView, StyleSheet, View, ActivityIndicator } from 'react-native'
 import { NFInlineTextInput } from '../components/ui'
 import NFButton from '../components/ui/NFButton'
+import Colors from '../constants/Colors'
 import { RootStackScreenProps } from '../types'
 
 const SendDataScreen = ({ route, navigation }: RootStackScreenProps<'SendData'>) => {
@@ -14,8 +15,12 @@ const SendDataScreen = ({ route, navigation }: RootStackScreenProps<'SendData'>)
   const [tableBuserName, setTableBuserName] = useState('')
   const [tableStatus, setTableStatus] = useState('')
 
+  const [requestLoading, setRequestLoading] = useState(false)
+
   const handleConfirmPress = () => {
     console.log("press")
+    setRequestLoading(true)
+    setTimeout(() => setRequestLoading(false), 4000)
   }
 
   return (
@@ -25,7 +30,9 @@ const SendDataScreen = ({ route, navigation }: RootStackScreenProps<'SendData'>)
         <NFInlineTextInput label='Buser' vStyle={styles.secondaryTextView} iStyle={styles.input} value={tableBuserName} onChangeText={setTableBuserName} />
         <NFInlineTextInput label='Status' vStyle={styles.secondaryTextView} iStyle={styles.input} value={tableStatus} onChangeText={setTableStatus} />
         <View>
-          <NFButton outerStyle={styles.buttonOuterView} title="Confirm" onPress={handleConfirmPress} />
+          <NFButton outerStyle={styles.buttonOuterView} title="Confirm" onPress={handleConfirmPress}>
+            { requestLoading ? <ActivityIndicator size="small" color={Colors.main.text} /> : null }
+          </NFButton>
         </View>
       </View>
     </ScrollView>

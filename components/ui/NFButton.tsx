@@ -11,9 +11,10 @@ type NFButtonProps = {
     outerStyle?:object;
     pressableStyle?:object;
     textStyle?:object;
+    children:any
 }
 
-const NFButton:React.FC<NFButtonProps> = ({ title, onPress, rippleColor = "#fff", disabled, outerStyle, pressableStyle, textStyle}) => {
+const NFButton:React.FC<NFButtonProps> = ({ title, onPress, rippleColor = "#fff", disabled, outerStyle, pressableStyle, textStyle, children }) => {
   return (
     <View style={[styles.container, outerStyle]}>
         <Pressable
@@ -22,7 +23,9 @@ const NFButton:React.FC<NFButtonProps> = ({ title, onPress, rippleColor = "#fff"
             disabled={disabled}
             android_ripple={{color: rippleColor}}
         >
-            <Text style={[styles.text, textStyle]}>{title}</Text>
+            {
+                children ? children : <Text style={[styles.text, textStyle]}>{title}</Text>
+            }
         </Pressable>
     </View>
   )
