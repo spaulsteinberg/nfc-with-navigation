@@ -15,12 +15,10 @@ const SendDataScreen = ({ route, navigation }: RootStackScreenProps<'SendData'>)
 
   const formik = useFormik({
     initialValues: {
-      number: route.params.data,
       buser: '',
       status: ''
     },
     validationSchema: Yup.object().shape({
-      number: Yup.string().trim().required("Table number is required"),
       buser: Yup.string().trim().required("Buser name is required.").max(50, "This field cannot be more than 50 characters."),
       status: Yup.string().trim().required("Status is a required field.")
     }),
@@ -31,9 +29,13 @@ const SendDataScreen = ({ route, navigation }: RootStackScreenProps<'SendData'>)
     }
   })
 
+  const setStatusDropdown = (i:string):void => {
+    formik.setFieldValue("status", i)
+  }
+
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ backgroundColor: "#fff" }}>
-      <TableForm formik={formik} loading={requestLoading} />
+      <TableForm formik={formik} loading={requestLoading} number={route.params.data} onDropSelect={setStatusDropdown} />
     </ScrollView>
   )
 }
