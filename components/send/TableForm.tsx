@@ -7,16 +7,17 @@ import { Text } from '../Themed'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 type TableFormProps = {
-    formik: any;
+    form: any;
     number: string;
     loading: boolean;
-    onDropSelect: (i: string) => void
+    handleChangeText: (k: string, v:string) => void;
+    handleSubmitPress: () => void
 }
 
-const TableForm: React.FC<TableFormProps> = ({ formik, number, loading, onDropSelect }) => {
+const TableForm: React.FC<TableFormProps> = ({ form, number, loading, handleChangeText, handleSubmitPress }) => {
     const [menuOpen, setMenuOpen] = useState(false)
     const handleMenuSelect = (i:string) => {
-        onDropSelect(i)
+        handleChangeText("status", i)
         setMenuOpen(false)
     }
     
@@ -29,21 +30,21 @@ const TableForm: React.FC<TableFormProps> = ({ formik, number, loading, onDropSe
             <View style={styles.secondaryTextView}>
                 <TextInput
                     label='Buser'
-                    value={formik.values.buser}
-                    onChangeText={formik.handleChange('buser')}
-                    onBlur={formik.handleBlur('buser')}
-                    error={formik.errors.buser && formik.touched.buser}
+                    value={form.values.buser}
+                    onChangeText={v => handleChangeText("buser", v)}
+                    error={form.errors.buser && form.touched.buser}
                     mode='outlined'
-                    right={<TextInput.Icon color={(focused:boolean) => !formik.touched.buser ? "gray" : formik.errors.buser && formik.touched.buser ? "#d32f2f" : "green"} forceTextInputFocus={false} icon={ formik.errors.buser && formik.touched.buser ? "close-circle" : "check-circle"} />}
+                    editable={!loading}
+                    right={<TextInput.Icon color={(focused:boolean) => !form.touched.buser ? "gray" : form.errors.buser && form.touched.buser ? "#d32f2f" : "green"} forceTextInputFocus={false} icon={ form.errors.buser && form.touched.buser ? "close-circle" : "check-circle"} />}
                 />
-                <HelperText type="error" visible={formik.errors.buser && formik.touched.buser}>{formik.errors.buser}</HelperText>
+                <HelperText type="error" visible={form.errors.buser && form.touched.buser}>{form.errors.buser}</HelperText>
             </View>
             <View style={styles.secondaryTextView}>
                 <Menu
                     style={{ paddingTop: 40 }}
                     visible={menuOpen}
                     onDismiss={() => setMenuOpen(false)}
-                    anchor={<NFDropdown error={formik.errors.status && formik.touched.status} mode="outlined" style={{ maxWidth: 200 }} onPress={() => setMenuOpen(true)} label="Status" value={formik.values.status} icon={menuOpen ? "chevron-up" : "chevron-down"} />}
+                    anchor={<NFDropdown error={form.errors.status && form.touched.status} mode="outlined" style={{ maxWidth: 200 }} onPress={() => setMenuOpen(true)} label="Status" value={form.values.status} icon={menuOpen ? "chevron-up" : "chevron-down"} />}
                 >
                     <Menu.Item 
                         title="Ready" 
@@ -53,10 +54,10 @@ const TableForm: React.FC<TableFormProps> = ({ formik, number, loading, onDropSe
                     <Menu.Item title="Cleaning" onPress={() => handleMenuSelect("Cleaning")} trailingIcon={() => <MaterialCommunityIcons name='check-circle' size={24} color="green" />} />
                     <Menu.Item title="Dirty" onPress={() => handleMenuSelect("Dirty")} trailingIcon={() => <MaterialCommunityIcons name='check-circle' size={24} color="green" />} />
                 </Menu>
-                <HelperText type="error" visible={formik.errors.status && formik.touched.status}>{formik.errors.status}</HelperText>
+                <HelperText type="error" visible={form.errors.status && form.touched.status}>{form.errors.status}</HelperText>
             </View>
             <View>
-                <NFButton outerStyle={styles.buttonOuterView} title="Confirm" onPress={() => { console.log("p"); formik.handleSubmit()}}>
+                <NFButton outerStyle={styles.buttonOuterView} title="Confirm" onPress={handleSubmitPress}>
                     {loading ? <ActivityIndicator size="small" color={Colors.main.text} /> : null}
                 </NFButton>
             </View>
