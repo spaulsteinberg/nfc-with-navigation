@@ -42,9 +42,9 @@ const TableForm: React.FC<TableFormProps> = ({ form, number, loading, handleChan
             <View style={styles.secondaryTextView}>
                 <Menu
                     style={{ paddingTop: 40 }}
-                    visible={menuOpen}
+                    visible={menuOpen && !loading}
                     onDismiss={() => setMenuOpen(false)}
-                    anchor={<NFDropdown error={form.errors.status && form.touched.status} mode="outlined" style={{ maxWidth: 200 }} onPress={() => setMenuOpen(true)} label="Status" value={form.values.status} icon={menuOpen ? "chevron-up" : "chevron-down"} />}
+                    anchor={<NFDropdown editable={!loading} error={form.errors.status && form.touched.status} mode="outlined" style={{ maxWidth: 200 }} onPress={() => setMenuOpen(true)} label="Status" value={form.values.status} icon={menuOpen ? "chevron-up" : "chevron-down"} />}
                 >
                     <Menu.Item 
                         title="Ready" 
@@ -71,17 +71,8 @@ const styles = StyleSheet.create({
         marginHorizontal: 12,
         marginVertical: 36
     },
-    input: {
-        padding: 8,
-        borderRadius: 8,
-        borderWidth: 1,
-        borderColor: "gray"
-    },
     secondaryTextView: {
         marginVertical: 3,
-        backgroundColor: "#fff"
-    },
-    matInput: {
         backgroundColor: "#fff"
     },
     buttonOuterView: {
