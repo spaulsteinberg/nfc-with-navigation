@@ -10,11 +10,12 @@ type TableFormProps = {
     form: any;
     number: string;
     loading: boolean;
+    error:boolean;
     handleChangeText: (k: string, v:string) => void;
     handleSubmitPress: () => void
 }
 
-const TableForm: React.FC<TableFormProps> = ({ form, number, loading, handleChangeText, handleSubmitPress }) => {
+const TableForm: React.FC<TableFormProps> = ({ form, number, loading, error, handleChangeText, handleSubmitPress }) => {
     const [menuOpen, setMenuOpen] = useState(false)
     const handleMenuSelect = (i:string) => {
         handleChangeText("status", i)
@@ -61,6 +62,9 @@ const TableForm: React.FC<TableFormProps> = ({ form, number, loading, handleChan
                     {loading ? <ActivityIndicator size="small" color={Colors.main.text} /> : null}
                 </NFButton>
             </View>
+            {
+                error && <Text style={styles.errorText}>An error occurred sending to management.</Text>
+            }
         </View>
     )
 }
@@ -88,6 +92,10 @@ const styles = StyleSheet.create({
     },
     titleContainer: {
         marginBottom: 12
+    },
+    errorText: {
+        textAlign: 'center',
+        color: Colors.main.background
     }
 })
 
