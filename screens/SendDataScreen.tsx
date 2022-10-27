@@ -2,22 +2,22 @@ import React, { useState } from 'react'
 import { ScrollView, Vibration } from 'react-native'
 import { RootStackScreenProps } from '../types'
 import TableForm from '../components/send/TableForm'
-
-const ONE_SECOND_IN_MS = 1000;
+import Time from '../constants/Time';
+import FormSuccess from '../components/send/FormSuccess';
 
 // wait, vibrate, wait, ...
 const ERROR_PATTERN = [
-  0 * ONE_SECOND_IN_MS,
-  .5 * ONE_SECOND_IN_MS,
-  2 * ONE_SECOND_IN_MS,
-  .5 * ONE_SECOND_IN_MS
+  0 * Time.ONE_SECOND_IN_MS,
+  .5 * Time.ONE_SECOND_IN_MS,
+  2 * Time.ONE_SECOND_IN_MS,
+  .5 * Time.ONE_SECOND_IN_MS
 ];
 
 const SUCCESS_PATTERN = [
-  0 * ONE_SECOND_IN_MS,
-  1 * ONE_SECOND_IN_MS,
-  .5 * ONE_SECOND_IN_MS,
-  1 * ONE_SECOND_IN_MS
+  0 * Time.ONE_SECOND_IN_MS,
+  1 * Time.ONE_SECOND_IN_MS,
+  .5 * Time.ONE_SECOND_IN_MS,
+  1 * Time.ONE_SECOND_IN_MS
 ];
 
 const SendDataScreen = ({ route, navigation }: RootStackScreenProps<'SendData'>) => {
@@ -28,6 +28,7 @@ const SendDataScreen = ({ route, navigation }: RootStackScreenProps<'SendData'>)
 
   const [requestLoading, setRequestLoading] = useState(false)
   const [requestError, setRequestError] = useState(false)
+  const [requestSuccess, setRequestSuccess] = useState(false)
 
   const [form, setForm] = useState({
     values: {
@@ -95,15 +96,18 @@ const SendDataScreen = ({ route, navigation }: RootStackScreenProps<'SendData'>)
     return true
   }
 
-  const handleSubmitPress = () => {
-    console.log(form)
-    setRequestLoading(true)
-    setRequestError(false)
+  const handleSubmitPress = async () => {
     try {
       if (!validateForm()) return
+      setRequestLoading(true)
+      // mock an api call
+      await new Promise(resolve => setTimeout(resolve, 3000))
+      setRequestError(false)
+      setRequestSuccess(true)
       Vibration.vibrate(SUCCESS_PATTERN)
-      //setTimeout(() => setRequestLoading(false), 2000)
-      // something here
+      setTimeout(() => {
+        navigation.navigate('Landing')
+      }, Time.ONE_SECOND_IN_MS * 3.5)
     } catch (err) {
       console.log(err)
       setRequestError(true)
@@ -115,7 +119,11 @@ const SendDataScreen = ({ route, navigation }: RootStackScreenProps<'SendData'>)
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ backgroundColor: "#fff" }}>
-      <TableForm form={form} loading={requestLoading} error={requestError} number={route.params.data} handleChangeText={handleChangeText} handleSubmitPress={handleSubmitPress} />
+      {
+        !requestSuccess ? 
+          <TableForm form={form} loading={requestLoading} error={requestError} number={route.params.data} handleChangeText={handleChangeText} handleSubmitPress={handleSubmitPress} />
+          : <FormSuccess number={route.params.data} />
+      }
     </ScrollView>
   )
 }
