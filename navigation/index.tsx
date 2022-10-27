@@ -30,7 +30,7 @@ const RootNavigator = () => {
       headerTitleAlign: 'center',
       headerRight: () => <Ionicons name="person-circle-outline" size={30} color="white" />
     }}>
-      <Stack.Screen name="Root" component={BottomTabNavigator} />
+      <Stack.Screen name="Root" component={BottomTabNavigator} options={{title: 'Scan App'}} />
       <Stack.Screen name="SendData" component={SendDataScreen} options={{ title: "Confirm & Send" }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
     </Stack.Navigator>
