@@ -54,7 +54,9 @@ const HomeNFCScan: React.FC<HomeNFCScanProps> = ({ scanning, handleScanningPress
     flex: 1,
     justifyContent: 'center',
     maxHeight: width > 320 ? 320 : 256,
-    width: width > 320 ? 320 / HEIGHT_WIDTH_FACTOR : 256 / HEIGHT_WIDTH_FACTOR
+    minHeight: 256,
+    width: width > 320 ? 320 / HEIGHT_WIDTH_FACTOR : 256 / HEIGHT_WIDTH_FACTOR,
+    marginVertical: width > 320 ? 24 : 0
   }
   return (
     <View style={styles.container}>
