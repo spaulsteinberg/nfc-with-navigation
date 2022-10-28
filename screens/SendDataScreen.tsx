@@ -4,6 +4,9 @@ import { RootStackScreenProps } from '../types'
 import TableForm from '../components/send/TableForm'
 import Time from '../constants/Time';
 import FormSuccess from '../components/send/FormSuccess';
+import { postLog } from '../firebase/api';
+import LogPayload from '../models/LogPayload';
+import { TableStatus } from '../constants/TableStatus';
 
 // wait, vibrate, wait, ...
 const ERROR_PATTERN = [
@@ -100,8 +103,7 @@ const SendDataScreen = ({ route, navigation }: RootStackScreenProps<'SendData'>)
     try {
       if (!validateForm()) return
       setRequestLoading(true)
-      // mock an api call
-      await new Promise(resolve => setTimeout(resolve, 3000))
+      await postLog(new LogPayload(route.params.data, form.values.buser, TableStatus[form.values.status as keyof typeof TableStatus]))
       setRequestError(false)
       setRequestSuccess(true)
       Vibration.vibrate(SUCCESS_PATTERN)
