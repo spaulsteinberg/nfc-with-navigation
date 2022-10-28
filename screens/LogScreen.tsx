@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { View, StyleSheet, FlatList } from 'react-native'
 import { ActivityIndicator } from 'react-native-paper'
+import LogDataTile from '../components/logs/LogDataTile'
 import LogNoDataFallback from '../components/logs/LogNoDataFallback'
 import { Text } from '../components/Themed'
 import getAllLogs from '../state/redux/effects/logEffects'
@@ -28,7 +29,7 @@ const LogScreen = ({ navigation }:RootTabScreenProps<'Logging'>) => {
           <FlatList
             numColumns={1}
             data={logs}
-            renderItem={({ item }) => <Text>{item.id} {item.status}</Text>}
+            renderItem={({ item }) => <LogDataTile log={item} />}
             keyExtractor={item => item.id}
             showsVerticalScrollIndicator={false}
           />
