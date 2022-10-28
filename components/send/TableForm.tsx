@@ -5,6 +5,7 @@ import { NFButton, NFDropdown } from '../ui'
 import { TextInput, HelperText, Menu } from 'react-native-paper';
 import { Text } from '../Themed'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { TableStatus } from '../../constants/TableStatus';
 
 type TableFormProps = {
     form: any;
@@ -49,11 +50,11 @@ const TableForm: React.FC<TableFormProps> = ({ form, number, loading, error, han
                 >
                     <Menu.Item 
                         title="Ready" 
-                        onPress={() => handleMenuSelect("Ready")} 
+                        onPress={() => handleMenuSelect(TableStatus.Ready)} 
                         trailingIcon={() => <MaterialCommunityIcons name='check-circle' size={24} color="green" />}
                     />
-                    <Menu.Item title="Cleaning" onPress={() => handleMenuSelect("Cleaning")} trailingIcon={() => <MaterialCommunityIcons name='check-circle' size={24} color="green" />} />
-                    <Menu.Item title="Dirty" onPress={() => handleMenuSelect("Dirty")} trailingIcon={() => <MaterialCommunityIcons name='check-circle' size={24} color="green" />} />
+                    <Menu.Item title="Cleaning" onPress={() => handleMenuSelect(TableStatus.Cleaning)} trailingIcon={() => <MaterialCommunityIcons name='check-circle' size={24} color="green" />} />
+                    <Menu.Item title="Dirty" onPress={() => handleMenuSelect(TableStatus.Dirty)} trailingIcon={() => <MaterialCommunityIcons name='check-circle' size={24} color="green" />} />
                 </Menu>
                 <HelperText type="error" visible={form.errors.status && form.touched.status}>{form.errors.status}</HelperText>
             </View>
