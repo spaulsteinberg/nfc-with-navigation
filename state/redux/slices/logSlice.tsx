@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import LogPayload from "../../../models/LogPayload";
+import TableLog from "../../../models/TableLog";
 import getAllLogs from "../effects/logEffects";
 
 interface LogState {
     loading: boolean;
-    data: LogPayload[];
+    data: TableLog[];
     error: string;
 }
 
