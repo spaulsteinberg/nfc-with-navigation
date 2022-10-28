@@ -63,7 +63,7 @@ const SendDataScreen = ({ route, navigation }: RootStackScreenProps<'SendData'>)
       ...form,
       values: {
         ...form.values,
-        [key]: newValue.trim()
+        [key]: newValue
       },
       touched: {
         ...form.touched,
@@ -106,7 +106,7 @@ const SendDataScreen = ({ route, navigation }: RootStackScreenProps<'SendData'>)
     try {
       if (!validateForm()) return
       setRequestLoading(true)
-      const payload = new LogPayload(route.params.data, form.values.buser, TableStatus[form.values.status as keyof typeof TableStatus])
+      const payload = new LogPayload(route.params.data, form.values.buser.trim(), TableStatus[form.values.status as keyof typeof TableStatus])
       const res = await postLog(payload)
       dispatch(addLog({ ...payload, date: new Date().toDateString(), id: res.id }))
       setRequestError(false)
