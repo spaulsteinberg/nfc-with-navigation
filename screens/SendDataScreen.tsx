@@ -7,6 +7,8 @@ import FormSuccess from '../components/send/FormSuccess';
 import { postLog } from '../firebase/api';
 import LogPayload from '../models/LogPayload';
 import { TableStatus } from '../constants/TableStatus';
+import { useAppDispatch } from '../state/redux/hooks';
+import { addLog } from '../state/redux/slices/logSlice';
 
 // wait, vibrate, wait, ...
 const ERROR_PATTERN = [
@@ -32,6 +34,7 @@ const SendDataScreen = ({ route, navigation }: RootStackScreenProps<'SendData'>)
   const [requestLoading, setRequestLoading] = useState(false)
   const [requestError, setRequestError] = useState(false)
   const [requestSuccess, setRequestSuccess] = useState(false)
+  const dispatch = useAppDispatch()
 
   const [form, setForm] = useState({
     values: {
@@ -103,7 +106,9 @@ const SendDataScreen = ({ route, navigation }: RootStackScreenProps<'SendData'>)
     try {
       if (!validateForm()) return
       setRequestLoading(true)
-      await postLog(new LogPayload(route.params.data, form.values.buser, TableStatus[form.values.status as keyof typeof TableStatus]))
+      const payload = new LogPayload(route.params.data, form.values.buser, TableStatus[form.values.status as keyof typeof TableStatus])
+      const res = await postLog(payload)
+      dispatch(addLog({ ...payload, date: new Date().toDateString(), id: res.id }))
       setRequestError(false)
       setRequestSuccess(true)
       Vibration.vibrate(SUCCESS_PATTERN)

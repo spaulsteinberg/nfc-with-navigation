@@ -18,7 +18,9 @@ const logSlice = createSlice({
     name: "LogSlice",
     initialState,
     reducers: {
-
+        addLog: (state, action:PayloadAction<TableLog>) => {
+            state.data.push(action.payload)
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(getAllLogs.pending, (state) => {
@@ -36,5 +38,7 @@ const logSlice = createSlice({
         })
     }
 })
+
+export const { addLog } = logSlice.actions
 
 export default logSlice.reducer
