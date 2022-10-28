@@ -19,7 +19,7 @@ const logSlice = createSlice({
     initialState,
     reducers: {
         addLog: (state, action:PayloadAction<TableLog>) => {
-            state.data.push(action.payload)
+            state.data = [action.payload, ...state.data]
         }
     },
     extraReducers: (builder) => {

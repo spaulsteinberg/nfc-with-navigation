@@ -16,7 +16,7 @@ const LogScreen = ({ navigation }:RootTabScreenProps<'Logging'>) => {
   const t = []
   console.log("LOGS", logs)
   useEffect(() => {
-    (!logs || logs.length === 0) && dispatch(getAllLogs())
+    dispatch(getAllLogs())
   }, [])
   
   return (
