@@ -10,27 +10,11 @@ type LogDataTileProps = {
 }
 
 const LogDataTile: React.FC<LogDataTileProps> = ({ log }) => {
-  let style:any = {
-    backgroundColor: 'lightgray',
-    color: 'black'
-  }
-  if (log.status === TableStatus.Ready) {
-    style.backgroundColor = "green"
-    style.color = "white"
-  }
-  else if (log.status === TableStatus.Cleaning) {
-    style.backgroundColor = "blue"
-    style.color = "white"
-  } else if (log.status === TableStatus.Dirty) {
-    style.backgroundColor = "red"
-    style.color = "white"
-  }
-
   return (
     <View style={styles.container}>
       <View style={styles.column}>
         <Text>{log.date.toString()}</Text>
-        <MaterialCommunityIcons name="calendar" size={24} color="white" />
+        <MaterialCommunityIcons name="calendar" size={24} color="purple" />
       </View>
       <View style={styles.column}>
         <Text>{log.tableNumber}</Text>
