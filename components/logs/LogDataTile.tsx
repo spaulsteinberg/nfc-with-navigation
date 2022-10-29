@@ -1,32 +1,37 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { Pressable, StyleSheet, View } from 'react-native'
 import TableLog from '../../models/TableLog'
 import { Text } from '../Themed'
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { TableStatus } from '../../constants/TableStatus';
 
 type LogDataTileProps = {
-  log: TableLog
+  log: TableLog,
+  onPress: (log:TableLog) => any
 }
 
-const LogDataTile: React.FC<LogDataTileProps> = ({ log }) => {
+const LogDataTile: React.FC<LogDataTileProps> = ({ log, onPress }) => {
   return (
     <View style={styles.container}>
-      <View style={styles.column}>
-        <Text>{log.date.toString().split(" ")[0]}</Text>
-        <MaterialCommunityIcons name="calendar" size={24} color="purple" />
-      </View>
-      <View style={styles.column}>
-        <Text>{log.tableNumber}</Text>
-        <MaterialCommunityIcons name="table-picnic" size={24} color="brown" />
-      </View>
-      <View style={styles.column}>
-        <Text>{log.status}</Text>
-        {
-          log.status === TableStatus.Dirty ? <MaterialIcons name="dirty-lens" size={24} color="red" />
-          : <MaterialCommunityIcons name={log.status === TableStatus.Cleaning ? "silverware-clean" : "silverware-fork-knife"} size={24} color={log.status === TableStatus.Cleaning ? "blue" : "green"} />
-        }
-      </View>
+      <Pressable style={({ pressed }) => [styles.pressable, pressed && styles.pressed]} android_ripple={{ color: "#fff" }} onPress={() => onPress(log)}>
+        <View style={styles.innerContainer}>
+          <View style={styles.column}>
+            <Text>{log.date.toString().split(" ")[0]}</Text>
+            <MaterialCommunityIcons name="calendar" size={24} color="purple" />
+          </View>
+          <View style={styles.column}>
+            <Text>{log.tableNumber}</Text>
+            <MaterialCommunityIcons name="table-picnic" size={24} color="brown" />
+          </View>
+          <View style={styles.column}>
+            <Text>{log.status}</Text>
+            {
+              log.status === TableStatus.Dirty ? <MaterialIcons name="dirty-lens" size={24} color="red" />
+                : <MaterialCommunityIcons name={log.status === TableStatus.Cleaning ? "silverware-clean" : "silverware-fork-knife"} size={24} color={log.status === TableStatus.Cleaning ? "blue" : "green"} />
+            }
+          </View>
+        </View>
+      </Pressable>
     </View>
   )
 }
@@ -40,14 +45,23 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     borderRadius: 5,
     overflow: 'hidden',
-    padding: 12,
-    flexDirection: 'row',
     elevation: 2
+  },
+  innerContainer: {
+    flex: 1,
+    flexDirection: 'row',
   },
   column: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between'
+  },
+  pressable: {
+    flex: 1,
+    padding: 12,
+  },
+  pressed: {
+    opacity: .7
   }
 })
 
