@@ -2,13 +2,14 @@ import React, { useState } from 'react'
 import { ScrollView, Vibration } from 'react-native'
 import { RootStackScreenProps } from '../types'
 import TableForm from '../components/send/TableForm'
-import Time from '../constants/Time';
+import Time, { convertTimestampDateToReadable } from '../constants/Time';
 import FormSuccess from '../components/send/FormSuccess';
 import { postLog } from '../firebase/api';
 import LogPayload from '../models/LogPayload';
 import { TableStatus } from '../constants/TableStatus';
 import { useAppDispatch } from '../state/redux/hooks';
 import { addLog } from '../state/redux/slices/logSlice';
+import { Timestamp } from 'firebase/firestore';
 
 // wait, vibrate, wait, ...
 const ERROR_PATTERN = [
@@ -108,7 +109,7 @@ const SendDataScreen = ({ route, navigation }: RootStackScreenProps<'SendData'>)
       setRequestLoading(true)
       const payload = new LogPayload(route.params.data, form.values.buser.trim(), TableStatus[form.values.status as keyof typeof TableStatus])
       const res = await postLog(payload)
-      dispatch(addLog({ ...payload, date: new Date().toDateString(), id: res.id }))
+      dispatch(addLog({ ...payload, date: convertTimestampDateToReadable(Timestamp.now().toDate()), id: res.id }))
       setRequestError(false)
       setRequestSuccess(true)
       Vibration.vibrate(SUCCESS_PATTERN)
