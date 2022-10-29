@@ -20,6 +20,9 @@ const logSlice = createSlice({
     reducers: {
         addLog: (state, action:PayloadAction<TableLog>) => {
             state.data = [action.payload, ...state.data]
+        },
+        setLogs: (state, action:PayloadAction<TableLog[]>) => {
+            state.data = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -39,6 +42,6 @@ const logSlice = createSlice({
     }
 })
 
-export const { addLog } = logSlice.actions
+export const { addLog, setLogs } = logSlice.actions
 
 export default logSlice.reducer
