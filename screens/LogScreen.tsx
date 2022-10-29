@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react'
 import { View, StyleSheet, FlatList, Alert, RefreshControl } from 'react-native'
-import { ActivityIndicator } from 'react-native-paper'
 import LogDataTile from '../components/logs/LogDataTile'
 import LogNoDataFallback from '../components/logs/LogNoDataFallback'
 import SearchLogData from '../components/logs/SearchLogData'
@@ -10,9 +9,9 @@ import { useAppDispatch, useAppSelector } from '../state/redux/hooks'
 import { RootTabScreenProps } from '../types'
 import { getLogs } from '../firebase/api'
 import { setLogs } from '../state/redux/slices/logSlice'
+import LogLoadingSkeleton from '../components/logs/LogLoadingSkeleton'
 
 const LogScreen = ({ navigation }:RootTabScreenProps<'Logging'>) => {
-  //{"buser": "Jarvis", "date": [Object], "status": "Dirty", "tableNumber": "2"}
   const logs = useAppSelector(state => state.logs.data)
   const logsLoading = useAppSelector(state => state.logs.loading)
   const logsError = useAppSelector(state => state.logs.error)
@@ -44,7 +43,7 @@ const LogScreen = ({ navigation }:RootTabScreenProps<'Logging'>) => {
   return (
     <View style={styles.container}>
       {
-        logsLoading ? <ActivityIndicator size="large" color="green" />
+        logsLoading ? <LogLoadingSkeleton />
         : logsError ? <LogNoDataFallback message='Could not retrieve logs at this time.' isError />
         : logs.length === 0 ? <LogNoDataFallback message='There are no logs to display!'/> : (
           <FlatList
