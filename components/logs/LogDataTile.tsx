@@ -13,7 +13,7 @@ const LogDataTile: React.FC<LogDataTileProps> = ({ log }) => {
   return (
     <View style={styles.container}>
       <View style={styles.column}>
-        <Text>{log.date.toString()}</Text>
+        <Text>{log.date.toString().split(" ")[0]}</Text>
         <MaterialCommunityIcons name="calendar" size={24} color="purple" />
       </View>
       <View style={styles.column}>
