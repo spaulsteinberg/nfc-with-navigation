@@ -11,6 +11,7 @@ import Colors from '../constants/Colors';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import LogScreen from '../screens/LogScreen';
 import { MaterialIcons } from '@expo/vector-icons';
+import LogDetailScreen from '../screens/LogDetailScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -32,6 +33,7 @@ const RootNavigator = () => {
     }}>
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{title: 'Scan App'}} />
       <Stack.Screen name="SendData" component={SendDataScreen} options={{ title: "Confirm & Send" }} />
+      <Stack.Screen name="LogDetail" component={LogDetailScreen} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
     </Stack.Navigator>
   );

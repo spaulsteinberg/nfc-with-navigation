@@ -6,6 +6,7 @@
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import TableLog from './models/TableLog';
 
 declare global {
   namespace ReactNavigation {
@@ -17,6 +18,7 @@ export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   Landing: undefined;
   SendData: { data: any },
+  LogDetail: { log: TableLog }
   NotFound: undefined;
 };
 

@@ -39,6 +39,8 @@ const LogScreen = ({ navigation }:RootTabScreenProps<'Logging'>) => {
       return Alert.alert("Could not refresh feed.", "Please try again later.")
     }
   }
+
+  const handleLogPress = (log:TableLog):void => navigation.navigate("LogDetail", { log })
   
   return (
     <View style={styles.container}>
@@ -51,7 +53,7 @@ const LogScreen = ({ navigation }:RootTabScreenProps<'Logging'>) => {
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
             numColumns={1}
             data={filteredLogs}
-            renderItem={({ item }) => <LogDataTile log={item} />}
+            renderItem={({ item }) => <LogDataTile log={item} onPress={handleLogPress} />}
             keyExtractor={item => item.id}
             showsVerticalScrollIndicator={false}
           />
