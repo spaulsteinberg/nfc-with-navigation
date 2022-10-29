@@ -7,19 +7,36 @@ import { TableStatus } from '../../constants/TableStatus'
 
 const FALLBACK_COLOR = "orange"
 const CIRCLE_DIAMETER = 15
+const BASE_HEIGHT = 75
 
 type LogTimelineItemProps = {
     item: TableLog,
     isLastItem: boolean;
+    heightFactor: any;
 }
 
-const LogTimelineItem: React.FC<LogTimelineItemProps> = ({ item, isLastItem }) => {
+const LogTimelineItem: React.FC<LogTimelineItemProps> = ({ item, isLastItem, heightFactor }) => {
+    console.log(heightFactor)
     let color = item.status === TableStatus.Ready ? "green" : item.status === TableStatus.Cleaning ? "blue" : item.status === TableStatus.Dirty ? "red" : "orange"
     return (
-        <View style={[styles.row, { borderLeftColor: color }, isLastItem && { borderBottomColor: 'transparent', borderLeftColor: 'transparent' }]}>
-            <Text>{item.date.toString()}</Text>
+        <View style={[
+            styles.row,
+            {
+                borderLeftColor: color
+            },
+            isLastItem && {
+                borderBottomColor: 'transparent',
+                borderLeftColor: 'transparent',
+                height: BASE_HEIGHT
+            },
+            !isLastItem && {
+                height: BASE_HEIGHT + (BASE_HEIGHT * heightFactor * 3)
+            }
+        ]}>
+            <Text style={{flex: 1}}>{item.date.toString()}</Text>
+            <Text style={{flex: 1}}>{item.status} - X seconds</Text>
             <View style={[styles.circle, { backgroundColor: color }]}></View>
-            { isLastItem && <View style={styles.currentCircle}></View>}
+            {isLastItem && <View style={styles.currentCircle}></View>}
         </View>
     )
 }
@@ -30,7 +47,7 @@ const styles = StyleSheet.create({
         borderLeftColor: FALLBACK_COLOR,
         borderRightColor: 'transparent',
         borderTopColor: 'transparent',
-        height: 75,
+        height: BASE_HEIGHT,
         justifyContent: 'flex-start',
         paddingHorizontal: 24
     },
