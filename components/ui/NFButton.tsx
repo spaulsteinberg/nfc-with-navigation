@@ -11,7 +11,7 @@ type NFButtonProps = {
     outerStyle?:object;
     pressableStyle?:object;
     textStyle?:object;
-    children:any
+    children?:any
 }
 
 const NFButton:React.FC<NFButtonProps> = ({ title, onPress, rippleColor = "#fff", disabled, outerStyle, pressableStyle, textStyle, children }) => {
