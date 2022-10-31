@@ -4,6 +4,7 @@ import { StyleSheet, View } from 'react-native'
 import { Text } from 'react-native-paper'
 import TableLog from '../../models/TableLog'
 import { TableStatus } from '../../constants/TableStatus'
+import { convertTimestampDateToReadable } from '../../constants/Time'
 
 const FALLBACK_COLOR = "orange"
 const CIRCLE_DIAMETER = 15
@@ -16,7 +17,7 @@ type LogTimelineItemProps = {
 }
 
 const LogTimelineItem: React.FC<LogTimelineItemProps> = ({ item, isLastItem, heightFactor }) => {
-    console.log(heightFactor)
+    console.log(heightFactor, new Date(Number(item.date)))
     let color = item.status === TableStatus.Ready ? "green" : item.status === TableStatus.Cleaning ? "blue" : item.status === TableStatus.Dirty ? "red" : "orange"
     return (
         <View style={[
@@ -33,7 +34,8 @@ const LogTimelineItem: React.FC<LogTimelineItemProps> = ({ item, isLastItem, hei
                 height: BASE_HEIGHT + (BASE_HEIGHT * heightFactor * 3)
             }
         ]}>
-            <Text style={{flex: 1}}>{item.date.toString()}</Text>
+            {/* @ts-ignore -- this will always be a number that can be converted to a date */}
+            <Text style={{flex: 1}}>{convertTimestampDateToReadable(new Date(item.date))}</Text>
             <Text style={{flex: 1}}>{item.status} - X seconds</Text>
             <View style={[styles.circle, { backgroundColor: color }]}></View>
             {isLastItem && <View style={styles.currentCircle}></View>}
