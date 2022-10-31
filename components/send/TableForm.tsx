@@ -37,6 +37,7 @@ const TableForm: React.FC<TableFormProps> = ({ form, number, loading, error, han
                     error={form.errors.buser && form.touched.buser}
                     mode='outlined'
                     editable={!loading}
+                    onSubmitEditing={(e) => !form.values.status && setMenuOpen(true)}
                     right={<TextInput.Icon color={(focused:boolean) => !form.touched.buser ? "gray" : form.errors.buser && form.touched.buser ? "#d32f2f" : "green"} forceTextInputFocus={false} icon={ form.errors.buser && form.touched.buser ? "close-circle" : "check-circle"} />}
                 />
                 <HelperText type="error" visible={form.errors.buser && form.touched.buser}>{form.errors.buser}</HelperText>
