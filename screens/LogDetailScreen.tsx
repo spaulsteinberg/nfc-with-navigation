@@ -60,7 +60,8 @@ const LogDetailScreen = ({ route, navigation }: RootStackScreenProps<'LogDetail'
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        margin: 36
+        margin: 36,
+        marginLeft: 96
     },
 })
 

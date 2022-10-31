@@ -20,6 +20,8 @@ const LogTimelineItem: React.FC<LogTimelineItemProps> = ({ item, isLastItem, hei
     const minutes = timeDiffInSeconds / Time.ONE_MINUTE_IN_SECONDS
     let timeDifferenceDisplay =  isNaN(minutes) ? "" : `${minutes < 1 ? (minutes * 60) : minutes.toFixed(2)} ${minutes < 1 ? "seconds" : "minutes"}`
     let color = item.status === TableStatus.Ready ? "green" : item.status === TableStatus.Cleaning ? "blue" : item.status === TableStatus.Dirty ? "red" : "orange"
+    /* @ts-ignore -- this will always be a number that can be converted to a date */
+    const date = convertTimestampDateToReadable(new Date(item.date)).split(" ")
     return (
         <View style={[
             styles.row,
@@ -35,9 +37,11 @@ const LogTimelineItem: React.FC<LogTimelineItemProps> = ({ item, isLastItem, hei
                 height: BASE_HEIGHT + (BASE_HEIGHT * heightFactor * 3)
             }
         ]}>
-            {/* @ts-ignore -- this will always be a number that can be converted to a date */}
-            <Text style={{flex: 1}}>{convertTimestampDateToReadable(new Date(item.date))}</Text>
-            <Text style={{flex: 1}}>{item.status} {!isLastItem && timeDifferenceDisplay}</Text>
+            <Text style={[styles.date, { color }]}>{date[0]}</Text>
+            <Text style={[styles.time, { color }]}>{date[1] + " " + date[2] + " - " + item.status}</Text>
+            <View style={{flex: 1, justifyContent: 'center'}}>
+                <Text style={[{ color }]}>{!isLastItem && timeDifferenceDisplay}</Text>
+            </View>
             <View style={[styles.circle, { backgroundColor: color }]}></View>
             {isLastItem && <View style={styles.currentCircle}></View>}
         </View>
@@ -50,9 +54,11 @@ const styles = StyleSheet.create({
         borderLeftColor: FALLBACK_COLOR,
         borderRightColor: 'transparent',
         borderTopColor: 'transparent',
+        borderBottomColor: 'transparent',
         height: BASE_HEIGHT,
         justifyContent: 'flex-start',
-        paddingHorizontal: 24
+        paddingLeft: 15,
+        paddingRight: 12
     },
     circle: {
         height: CIRCLE_DIAMETER,
@@ -72,6 +78,23 @@ const styles = StyleSheet.create({
         zIndex: 2,
         left: -1 * (CIRCLE_DIAMETER / 4),
         top: -1 * (CIRCLE_DIAMETER / 4)
+    },
+    date: {
+        fontSize: 12, 
+        position: 'absolute',
+        left: -70,
+        top: -3
+    },
+    time: {
+        fontSize: 12, 
+        position: 'absolute',
+        left: 15,
+        top: -3
+    },
+    statusContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 })
 
