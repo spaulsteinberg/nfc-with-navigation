@@ -5,6 +5,7 @@ import { Text } from '../Themed'
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { TableStatus } from '../../constants/TableStatus';
 import { convertTimestampDateToReadable } from '../../constants/Time';
+import { statusColors } from '../../constants/Colors';
 
 type LogDataTileProps = {
   log: TableLog,
@@ -29,7 +30,7 @@ const LogDataTile: React.FC<LogDataTileProps> = ({ log, onPress }) => {
             <Text>{log.status}</Text>
             {
               log.status === TableStatus.Dirty ? <MaterialIcons name="dirty-lens" size={24} color="red" />
-                : <MaterialCommunityIcons name={log.status === TableStatus.Cleaning ? "silverware-clean" : "silverware-fork-knife"} size={24} color={log.status === TableStatus.Cleaning ? "blue" : "green"} />
+                : <MaterialCommunityIcons name={log.status === TableStatus.Cleaning ? "silverware-clean" : log.status === TableStatus.Ready ? "silverware-fork-knife" : "table-chair"} size={24} color={log.status === TableStatus.Cleaning ? "blue" : log.status === TableStatus.Ready ? "green" : statusColors.seated} />
             }
           </View>
         </View>

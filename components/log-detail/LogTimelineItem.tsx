@@ -4,6 +4,7 @@ import { Text } from 'react-native-paper'
 import TableLog from '../../models/TableLog'
 import { TableStatus } from '../../constants/TableStatus'
 import Time, { convertTimestampDateToReadable } from '../../constants/Time'
+import { statusColors } from '../../constants/Colors'
 
 const FALLBACK_COLOR = "orange"
 const CIRCLE_DIAMETER = 15
@@ -19,7 +20,7 @@ type LogTimelineItemProps = {
 const LogTimelineItem: React.FC<LogTimelineItemProps> = ({ item, isLastItem, heightFactor, timeDiffInSeconds }) => {
     const minutes = timeDiffInSeconds / Time.ONE_MINUTE_IN_SECONDS
     let timeDifferenceDisplay =  isNaN(minutes) ? "" : `${minutes < 1 ? (minutes * 60) : minutes.toFixed(2)} ${minutes < 1 ? "seconds" : "minutes"}`
-    let color = item.status === TableStatus.Ready ? "green" : item.status === TableStatus.Cleaning ? "blue" : item.status === TableStatus.Dirty ? "red" : "orange"
+    let color = item.status === TableStatus.Ready ? "green" : item.status === TableStatus.Cleaning ? "blue" : item.status === TableStatus.Dirty ? "red" : item.status === TableStatus.Seated ? statusColors.seated : "orange"
     /* @ts-ignore -- this will always be a number that can be converted to a date */
     const date = convertTimestampDateToReadable(new Date(item.date)).split(" ")
     return (
