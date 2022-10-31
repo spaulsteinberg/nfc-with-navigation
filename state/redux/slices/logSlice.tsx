@@ -23,6 +23,9 @@ const logSlice = createSlice({
         },
         setLogs: (state, action:PayloadAction<TableLog[]>) => {
             state.data = action.payload
+        },
+        mergeLogs: (state, action:PayloadAction<TableLog[]>) => {
+            state.data = [...state.data, ...action.payload].filter((value, index, self) => index === self.findIndex(t => t.id === value.id)).sort((a, b) => a.date > b.date ? -1 : a.date < b.date ? 1 : 0)
         }
     },
     extraReducers: (builder) => {
@@ -42,6 +45,6 @@ const logSlice = createSlice({
     }
 })
 
-export const { addLog, setLogs } = logSlice.actions
+export const { addLog, setLogs, mergeLogs } = logSlice.actions
 
 export default logSlice.reducer
