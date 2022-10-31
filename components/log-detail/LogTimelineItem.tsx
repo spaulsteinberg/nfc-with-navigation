@@ -17,7 +17,6 @@ type LogTimelineItemProps = {
 }
 
 const LogTimelineItem: React.FC<LogTimelineItemProps> = ({ item, isLastItem, heightFactor }) => {
-    console.log(heightFactor, new Date(Number(item.date)))
     let color = item.status === TableStatus.Ready ? "green" : item.status === TableStatus.Cleaning ? "blue" : item.status === TableStatus.Dirty ? "red" : "orange"
     return (
         <View style={[
@@ -36,7 +35,7 @@ const LogTimelineItem: React.FC<LogTimelineItemProps> = ({ item, isLastItem, hei
         ]}>
             {/* @ts-ignore -- this will always be a number that can be converted to a date */}
             <Text style={{flex: 1}}>{convertTimestampDateToReadable(new Date(item.date))}</Text>
-            <Text style={{flex: 1}}>{item.status} - X seconds</Text>
+            <Text style={{flex: 1}}>{item.status} {!isLastItem && "- X seconds"}</Text>
             <View style={[styles.circle, { backgroundColor: color }]}></View>
             {isLastItem && <View style={styles.currentCircle}></View>}
         </View>
