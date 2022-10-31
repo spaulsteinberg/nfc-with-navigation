@@ -1,8 +1,9 @@
 
 enum TableStatus {
     Ready = "Ready",
-    Cleaning = "Cleaning",
+    Seated = "Seated",
     Dirty = "Dirty",
+    Cleaning = "Cleaning",
 }
 
 export { TableStatus }

@@ -54,8 +54,9 @@ const TableForm: React.FC<TableFormProps> = ({ form, number, loading, error, han
                         onPress={() => handleMenuSelect(TableStatus.Ready)} 
                         trailingIcon={() => <MaterialCommunityIcons name='check-circle' size={24} color="green" />}
                     />
-                    <Menu.Item title="Cleaning" onPress={() => handleMenuSelect(TableStatus.Cleaning)} trailingIcon={() => <MaterialCommunityIcons name='check-circle' size={24} color="green" />} />
+                    <Menu.Item title="Seated" onPress={() => handleMenuSelect(TableStatus.Seated)} trailingIcon={() => <MaterialCommunityIcons name='check-circle' size={24} color="green" />} />
                     <Menu.Item title="Dirty" onPress={() => handleMenuSelect(TableStatus.Dirty)} trailingIcon={() => <MaterialCommunityIcons name='check-circle' size={24} color="green" />} />
+                    <Menu.Item title="Cleaning" onPress={() => handleMenuSelect(TableStatus.Cleaning)} trailingIcon={() => <MaterialCommunityIcons name='check-circle' size={24} color="green" />} />
                 </Menu>
                 <HelperText type="error" visible={form.errors.status && form.touched.status}>{form.errors.status}</HelperText>
             </View>
