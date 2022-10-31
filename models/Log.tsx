@@ -12,7 +12,7 @@ interface Log {
     tableNumber:string;
     buser:string;
     status:TableStatus;
-    date:Timestamp|string;
+    date:Timestamp|number;
 }
 
 export default Log

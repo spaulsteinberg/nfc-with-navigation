@@ -4,6 +4,7 @@ import TableLog from '../../models/TableLog'
 import { Text } from '../Themed'
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { TableStatus } from '../../constants/TableStatus';
+import { convertTimestampDateToReadable } from '../../constants/Time';
 
 type LogDataTileProps = {
   log: TableLog,
@@ -16,7 +17,8 @@ const LogDataTile: React.FC<LogDataTileProps> = ({ log, onPress }) => {
       <Pressable style={({ pressed }) => [styles.pressable, pressed && styles.pressed]} android_ripple={{ color: "#fff" }} onPress={() => onPress(log)}>
         <View style={styles.innerContainer}>
           <View style={styles.column}>
-            <Text>{log.date.toString().split(" ")[0]}</Text>
+            {/* @ts-ignore -- this will always be a number that can be converted to a date */}
+            <Text>{convertTimestampDateToReadable(new Date(log.date)).split(" ")[0]}</Text>
             <MaterialCommunityIcons name="calendar" size={24} color="purple" />
           </View>
           <View style={styles.column}>
