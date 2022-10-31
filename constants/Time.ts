@@ -15,8 +15,11 @@ const convertTimestampDateToReadable = (date:Date):string => {
         return `${days} ${hr}:${time_separated[1]}:${time_separated[2]} ${suf}`
 }
 
+const ONE_SECOND_IN_MS = 1000
+
 export { convertTimestampDateToReadable }
 
 export default {
-    ONE_SECOND_IN_MS: 1000
+    ONE_SECOND_IN_MS,
+    ONE_MINUTE_IN_SECONDS: ONE_SECOND_IN_MS * 60
 }

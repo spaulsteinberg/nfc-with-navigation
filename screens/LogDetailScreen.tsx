@@ -32,8 +32,8 @@ const LogDetailScreen = ({ route, navigation }: RootStackScreenProps<'LogDetail'
         }
     }
 
-    const timeDifferences = useMemo(() => {
-        let timeDifferences:any = []
+    const timeDifferences:number[] = useMemo(() => {
+        let timeDifferences:number[] = []
         for (let i = 0; i < logs.length; i++) {
             if ((i + 1) > logs.length - 1) {
                 console.log("index", i + 1, "is out of bounds")
@@ -44,13 +44,13 @@ const LogDetailScreen = ({ route, navigation }: RootStackScreenProps<'LogDetail'
         return timeDifferences
     }, [logs])
 
-    const totalRatio = useMemo(() => Number(logs[logs.length - 1].date) - Number(logs[0].date), [])
+    const totalRatio:number = useMemo(() => Number(logs[logs.length - 1].date) - Number(logs[0].date), [])
 
     return (
         <ScrollView contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}>
             <View style={styles.container}>
                 {
-                    logs.map((log, i) => <LogTimelineItem key={log.id} item={log} isLastItem={i === logs.length - 1} heightFactor={timeDifferences[i] / totalRatio} />)
+                    logs.map((log, i) => <LogTimelineItem key={log.id} item={log} isLastItem={i === logs.length - 1} timeDiffInSeconds={timeDifferences[i]} heightFactor={timeDifferences[i] / totalRatio} />)
                 }
             </View>
         </ScrollView>
