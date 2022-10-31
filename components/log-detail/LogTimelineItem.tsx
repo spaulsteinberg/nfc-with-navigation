@@ -18,9 +18,10 @@ type LogTimelineItemProps = {
 }
 
 const LogTimelineItem: React.FC<LogTimelineItemProps> = ({ item, isLastItem, heightFactor, timeDiffInSeconds }) => {
+    const { ready, seated, dirty, cleaning } = statusColors
     const minutes = timeDiffInSeconds / Time.ONE_MINUTE_IN_SECONDS
     let timeDifferenceDisplay =  isNaN(minutes) ? "" : `${minutes < 1 ? (minutes * 60) : minutes.toFixed(2)} ${minutes < 1 ? "seconds" : "minutes"}`
-    let color = item.status === TableStatus.Ready ? "green" : item.status === TableStatus.Cleaning ? "blue" : item.status === TableStatus.Dirty ? "red" : item.status === TableStatus.Seated ? statusColors.seated : "orange"
+    let color = item.status === TableStatus.Ready ? ready : item.status === TableStatus.Cleaning ? cleaning : item.status === TableStatus.Dirty ? dirty : item.status === TableStatus.Seated ? seated : "orange"
     /* @ts-ignore -- this will always be a number that can be converted to a date */
     const date = convertTimestampDateToReadable(new Date(item.date)).split(" ")
     return (

@@ -13,6 +13,7 @@ type LogDataTileProps = {
 }
 
 const LogDataTile: React.FC<LogDataTileProps> = ({ log, onPress }) => {
+  const { ready, seated, dirty, cleaning } = statusColors
   return (
     <View style={styles.container}>
       <Pressable style={({ pressed }) => [styles.pressable, pressed && styles.pressed]} android_ripple={{ color: "#fff" }} onPress={() => onPress(log)}>
@@ -29,8 +30,11 @@ const LogDataTile: React.FC<LogDataTileProps> = ({ log, onPress }) => {
           <View style={styles.column}>
             <Text>{log.status}</Text>
             {
-              log.status === TableStatus.Dirty ? <MaterialIcons name="dirty-lens" size={24} color="red" />
-                : <MaterialCommunityIcons name={log.status === TableStatus.Cleaning ? "silverware-clean" : log.status === TableStatus.Ready ? "silverware-fork-knife" : "table-chair"} size={24} color={log.status === TableStatus.Cleaning ? "blue" : log.status === TableStatus.Ready ? "green" : statusColors.seated} />
+              log.status === TableStatus.Dirty ? <MaterialIcons name="dirty-lens" size={24} color={dirty} />
+                : <MaterialCommunityIcons 
+                    name={log.status === TableStatus.Cleaning ? "silverware-clean" : log.status === TableStatus.Ready ? "silverware-fork-knife" : "table-chair"} 
+                    size={24} 
+                    color={log.status === TableStatus.Cleaning ? cleaning : log.status === TableStatus.Ready ? ready : seated} />
             }
           </View>
         </View>
