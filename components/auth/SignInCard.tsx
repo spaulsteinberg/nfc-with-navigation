@@ -9,10 +9,12 @@ const WIDTH = Dimensions.get('window').width
 
 type SignInCardProps = {
     form:InteractiveForm;
-    handleChangeText: (e:string, n:string) => void
+    handleChangeText: (e:string, n:string) => void;
+    handleSubmitPress: () => void;
+    handleEmailBlur: () => void
 }
 
-const SignInCard:React.FC<SignInCardProps> = ({ form, handleChangeText }) => {
+const SignInCard:React.FC<SignInCardProps> = ({ form, handleChangeText, handleSubmitPress, handleEmailBlur }) => {
     return (
         <Card style={styles.card}>
             <Card.Title title="Sign in" titleVariant='headlineSmall' titleStyle={{ textAlign: 'center' }} />
@@ -26,6 +28,7 @@ const SignInCard:React.FC<SignInCardProps> = ({ form, handleChangeText }) => {
                         keyboardType='email-address' 
                         autoCapitalize='none' 
                         error={form.errors.email !== "" && form.touched.email}
+                        onBlur={handleEmailBlur}
                     />
                     <HelperText type="error" visible={form.errors.email !== "" && form.touched.email}>{form.errors.email}</HelperText>
                 </View>
@@ -46,7 +49,7 @@ const SignInCard:React.FC<SignInCardProps> = ({ form, handleChangeText }) => {
             <Card.Actions style={styles.loginButton}>
                 <NFButton
                     title="Login"
-                    onPress={() => console.log("press")}
+                    onPress={handleSubmitPress}
                     rippleColor="#ff0000"
                     pressableStyle={{ backgroundColor: Colors.main.text }}
                     textStyle={{ color: Colors.main.background }}
