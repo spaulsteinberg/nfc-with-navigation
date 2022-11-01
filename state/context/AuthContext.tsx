@@ -1,11 +1,12 @@
 import React, { useState, createContext, useContext, useEffect } from 'react'
 import { auth } from '../../firebase/config'
-import { Auth, signInWithEmailAndPassword, User, UserCredential } from 'firebase/auth'
+import { Auth, signInWithEmailAndPassword, signOut, User, UserCredential } from 'firebase/auth'
 import { ActivityIndicator } from 'react-native'
 
 export interface IAuthContext {
     user: User | null;
-    signIn: (a:Auth, e:string, p:string) => Promise<UserCredential>
+    signIn: (a:Auth, e:string, p:string) => Promise<UserCredential>,
+    signOutUser: (a:Auth) => Promise<void>
 }
 
 type AuthProps = { children?: React.ReactNode}
@@ -17,7 +18,6 @@ export const useAuthContext = () => useContext(AuthContext)
 const AuthContextProvider = ({ children }:AuthProps) => {
     const [user, setUser] = useState<any>(null)
     const [loading, setLoading] = useState(true)
-    
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
             setUser(user)
@@ -29,9 +29,12 @@ const AuthContextProvider = ({ children }:AuthProps) => {
 
     const signInUserWithEmailAndPassword = (auth:Auth, email:string, password:string) => signInWithEmailAndPassword(auth, email, password)
 
+    const signOutUser = (auth:Auth) => signOut(auth)
+
     const value = {
         user,
-        signIn: signInUserWithEmailAndPassword
+        signIn: signInUserWithEmailAndPassword,
+        signOut: signOutUser
     }
 
     return (

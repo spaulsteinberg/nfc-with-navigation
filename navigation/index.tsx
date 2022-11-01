@@ -6,25 +6,24 @@ import LandingScreen from '../screens/LandingScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import SendDataScreen from '../screens/SendDataScreen';
 import { RootStackParamList, RootTabParamList } from '../types';
-import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import LogScreen from '../screens/LogScreen';
 import { MaterialIcons } from '@expo/vector-icons';
 import LogDetailScreen from '../screens/LogDetailScreen';
 import SignInScreen from '../screens/SignInScreen';
-import { Auth, getAuth, signOut, User } from 'firebase/auth';
+import { useAuthContext } from '../state/context/AuthContext';
+import HeaderIconWithActions from '../components/nav/HeaderIconWithActions';
 
 type NavComponentProps = {
-  colorScheme: ColorSchemeName,
-  user: User | null
+  colorScheme: ColorSchemeName
 }
 
-export default function Navigation({ colorScheme, user }: NavComponentProps) {
-  console.log(user)
+export default function Navigation({ colorScheme }: NavComponentProps) {
+  const user = useAuthContext()
   return (
     <NavigationContainer theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      { user ? <RootNavigator /> : <UnAuthorizedNavigator /> }
+      { user?.user ? <RootNavigator /> : <UnAuthorizedNavigator /> }
     </NavigationContainer>
   );
 }
@@ -55,7 +54,7 @@ const RootNavigator = () => {
       headerStyle: { backgroundColor: Colors.main.background },
       headerTintColor: Colors.main.text,
       headerTitleAlign: 'center',
-      headerRight: () => <Ionicons name="person-circle-outline" size={30} color="white" />
+      headerRight: () => <HeaderIconWithActions />
     }}>
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{title: 'Scan App'}} />
       <Stack.Screen name="SendData" component={SendDataScreen} options={{ title: "Confirm & Send" }} />
