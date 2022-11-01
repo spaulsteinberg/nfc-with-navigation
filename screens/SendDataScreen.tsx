@@ -10,6 +10,7 @@ import { TableStatus } from '../constants/TableStatus';
 import { useAppDispatch } from '../state/redux/hooks';
 import { addLog } from '../state/redux/slices/logSlice';
 import { Timestamp } from 'firebase/firestore';
+import InteractiveForm, { validateInteractiveForm, ValidationResponse } from '../models/InteractiveForm';
 
 // wait, vibrate, wait, ...
 const ERROR_PATTERN = [
@@ -37,7 +38,7 @@ const SendDataScreen = ({ route, navigation }: RootStackScreenProps<'SendData'>)
   const [requestSuccess, setRequestSuccess] = useState(false)
   const dispatch = useAppDispatch()
 
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<InteractiveForm>({
     values: {
       buser: '',
       status: ''
@@ -78,14 +79,9 @@ const SendDataScreen = ({ route, navigation }: RootStackScreenProps<'SendData'>)
   }
 
   const validateForm = (): boolean => {
-    const nonBlankErrors = Object.keys(form.errors).filter((e: string) => form.errors[e as keyof typeof form.errors] !== '')
-    if (nonBlankErrors.length > 0) {
-      console.log("errors exist", nonBlankErrors)
-      return false
-    }
-
-    const unTouchedFields = Object.keys(form.touched).filter((t: string) => !form.touched[t as keyof typeof form.touched])
-    if (unTouchedFields.length > 0) {
+    const v: ValidationResponse = validateInteractiveForm(form)
+    if (v === ValidationResponse.Errors) return false;
+    else if (v === ValidationResponse.Touched) {
       setForm({
         ...form,
         errors: {
@@ -99,7 +95,6 @@ const SendDataScreen = ({ route, navigation }: RootStackScreenProps<'SendData'>)
       })
       return false
     }
-
     return true
   }
 
@@ -128,7 +123,7 @@ const SendDataScreen = ({ route, navigation }: RootStackScreenProps<'SendData'>)
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ backgroundColor: "#fff" }}>
       {
-        !requestSuccess ? 
+        !requestSuccess ?
           <TableForm form={form} loading={requestLoading} error={requestError} number={route.params.data} handleChangeText={handleChangeText} handleSubmitPress={handleSubmitPress} />
           : <FormSuccess number={route.params.data} />
       }
