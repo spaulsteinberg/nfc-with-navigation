@@ -12,17 +12,15 @@ import { getAuth } from 'firebase/auth';
 export default function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
-  const authContext = useAuthContext()
   if (!isLoadingComplete) {
     return null;
   } else {
-    console.log(authContext?.user)
     return (
       <SafeAreaProvider>
         <AuthContextProvider>
           <Provider store={store}>
             <PaperProvider>
-              <Navigation colorScheme={colorScheme} user={authContext?.user}/>
+              <Navigation colorScheme={colorScheme} />
               <StatusBar style='light' />
             </PaperProvider>
           </Provider>
