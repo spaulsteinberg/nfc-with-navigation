@@ -1,6 +1,6 @@
 import { getAuth } from 'firebase/auth'
 import React, { useState } from 'react'
-import { View, StyleSheet, Dimensions, ScrollView, ImageBackground } from 'react-native'
+import { View, StyleSheet, Dimensions, ScrollView, ImageBackground, Alert } from 'react-native'
 import SignInCard from '../components/auth/SignInCard'
 import InteractiveForm, { validateInteractiveForm, ValidationResponse } from '../models/InteractiveForm'
 import { IAuthContext, useAuthContext } from '../state/context/AuthContext'
@@ -74,6 +74,7 @@ const SignInScreen = () => {
             console.log(r)
         } catch (err) {
             console.log(err)
+            return Alert.alert("Sign in failed.", "Please check your credentials and try again.")
         }
     }
 
