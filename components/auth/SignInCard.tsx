@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, Dimensions } from 'react-native'
+import { View, StyleSheet, Dimensions, ActivityIndicator } from 'react-native'
 import { Card, HelperText, TextInput } from 'react-native-paper'
 import Colors from '../../constants/Colors'
 import InteractiveForm from '../../models/InteractiveForm'
@@ -9,12 +9,13 @@ const WIDTH = Dimensions.get('window').width
 
 type SignInCardProps = {
     form:InteractiveForm;
+    loading:boolean;
     handleChangeText: (e:string, n:string) => void;
     handleSubmitPress: () => Promise<void>;
     handleEmailBlur: () => void
 }
 
-const SignInCard:React.FC<SignInCardProps> = ({ form, handleChangeText, handleSubmitPress, handleEmailBlur }) => {
+const SignInCard:React.FC<SignInCardProps> = ({ form, loading, handleChangeText, handleSubmitPress, handleEmailBlur }) => {
     return (
         <Card style={styles.card}>
             <Card.Title title="Sign in" titleVariant='headlineSmall' titleStyle={{ textAlign: 'center' }} />
@@ -29,6 +30,7 @@ const SignInCard:React.FC<SignInCardProps> = ({ form, handleChangeText, handleSu
                         autoCapitalize='none' 
                         error={form.errors.email !== "" && form.touched.email}
                         onBlur={handleEmailBlur}
+                        editable={!loading}
                     />
                     <HelperText type="error" visible={form.errors.email !== "" && form.touched.email}>{form.errors.email}</HelperText>
                 </View>
@@ -42,6 +44,7 @@ const SignInCard:React.FC<SignInCardProps> = ({ form, handleChangeText, handleSu
                         autoCapitalize='none' 
                         autoCorrect={false} 
                         error={form.errors.password !== "" && form.touched.password}
+                        editable={!loading}
                     />
                     <HelperText type="error" visible={form.errors.password !== "" && form.touched.password}>{form.errors.password}</HelperText>
                 </View>
@@ -53,7 +56,9 @@ const SignInCard:React.FC<SignInCardProps> = ({ form, handleChangeText, handleSu
                     rippleColor="#ff0000"
                     pressableStyle={{ backgroundColor: Colors.main.text }}
                     textStyle={{ color: Colors.main.background }}
-                    outerStyle={{ borderWidth: 1, borderColor: Colors.main.background }} />
+                    outerStyle={{ borderWidth: 1, borderColor: Colors.main.background }}>
+                        { loading && <ActivityIndicator size="small" color={Colors.main.background} /> }
+                    </NFButton>
             </Card.Actions>
         </Card>
     )

@@ -10,6 +10,7 @@ const WIDTH = Dimensions.get('window').width
 const SignInScreen = () => {
     const userAuth = useAuthContext() as IAuthContext
     const auth = getAuth()
+    const [loading, setLoading] = useState(false)
     const [form, setForm] = useState<InteractiveForm>({
         values: {
             email: '',
@@ -70,11 +71,14 @@ const SignInScreen = () => {
     const handleSubmitPress = async () => {
         try {
             if (!validateForm()) return
+            setLoading(true)
             const r = await userAuth.signIn(auth, form.values.email, form.values.password)
             console.log(r)
         } catch (err) {
             console.log(err)
-            return Alert.alert("Sign in failed.", "Please check your credentials and try again.")
+            Alert.alert("Sign in failed.", "Please check your credentials and try again.")
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -92,7 +96,7 @@ const SignInScreen = () => {
         <ScrollView contentContainerStyle={styles.scroll}>
             <ImageBackground source={require('../assets/images/stacked-waves-haikei.png')} resizeMode="cover" style={styles.backgroundImage}>
                 <View style={styles.container}>
-                    <SignInCard form={form} handleChangeText={handleChangeText} handleSubmitPress={handleSubmitPress} handleEmailBlur={handleEmailBlur} />
+                    <SignInCard form={form} loading={loading} handleChangeText={handleChangeText} handleSubmitPress={handleSubmitPress} handleEmailBlur={handleEmailBlur} />
                 </View>
             </ImageBackground>
         </ScrollView>
