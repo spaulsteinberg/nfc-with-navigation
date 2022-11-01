@@ -20,6 +20,7 @@ export type RootStackParamList = {
   SendData: { data: any },
   LogDetail: { log: TableLog }
   NotFound: undefined;
+  SignIn:undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<

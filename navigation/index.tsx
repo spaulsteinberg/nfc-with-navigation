@@ -12,16 +12,42 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import LogScreen from '../screens/LogScreen';
 import { MaterialIcons } from '@expo/vector-icons';
 import LogDetailScreen from '../screens/LogDetailScreen';
+import SignInScreen from '../screens/SignInScreen';
+import { Auth, getAuth, signOut, User } from 'firebase/auth';
 
-export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
+type NavComponentProps = {
+  colorScheme: ColorSchemeName,
+  user: User | null
+}
+
+export default function Navigation({ colorScheme, user }: NavComponentProps) {
+  console.log(user)
   return (
     <NavigationContainer theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <RootNavigator />
+      { user ? <RootNavigator /> : <UnAuthorizedNavigator /> }
     </NavigationContainer>
   );
 }
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+
+const UnAuthorizedNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{
+      headerStyle: { backgroundColor: Colors.main.background },
+      headerTintColor: Colors.main.text,
+      headerTitleAlign: 'center',
+      headerRight: () => null
+    }}>
+      <Stack.Screen
+        name="SignIn" 
+        component={SignInScreen} 
+        options={{title: "NFC Analytic App"}} 
+      />
+    </Stack.Navigator>
+  )
+}
+
 
 const RootNavigator = () => {
   return (

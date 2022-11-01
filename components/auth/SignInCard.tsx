@@ -10,7 +10,7 @@ const WIDTH = Dimensions.get('window').width
 type SignInCardProps = {
     form:InteractiveForm;
     handleChangeText: (e:string, n:string) => void;
-    handleSubmitPress: () => void;
+    handleSubmitPress: () => Promise<void>;
     handleEmailBlur: () => void
 }
 

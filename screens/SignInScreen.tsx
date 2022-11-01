@@ -1,11 +1,15 @@
+import { getAuth } from 'firebase/auth'
 import React, { useState } from 'react'
 import { View, StyleSheet, Dimensions, ScrollView, ImageBackground } from 'react-native'
 import SignInCard from '../components/auth/SignInCard'
 import InteractiveForm, { validateInteractiveForm, ValidationResponse } from '../models/InteractiveForm'
+import { IAuthContext, useAuthContext } from '../state/context/AuthContext'
 
 const WIDTH = Dimensions.get('window').width
 
 const SignInScreen = () => {
+    const userAuth = useAuthContext() as IAuthContext
+    const auth = getAuth()
     const [form, setForm] = useState<InteractiveForm>({
         values: {
             email: '',
@@ -43,10 +47,9 @@ const SignInScreen = () => {
         })
     }
 
-    const handleSubmitPress = () => {
+    const validateForm = (): boolean => {
         const v: ValidationResponse = validateInteractiveForm(form)
-        console.log(form)
-        if (v === ValidationResponse.Errors) return;
+        if (v === ValidationResponse.Errors) return false;
         else if (v === ValidationResponse.Touched) {
             setForm({
                 ...form,
@@ -59,9 +62,19 @@ const SignInScreen = () => {
                     password: true
                 }
             })
+            return false
         }
+        return true
+    }
 
-        console.log(v)
+    const handleSubmitPress = async () => {
+        try {
+            if (!validateForm()) return
+            const r = await userAuth.signIn(auth, form.values.email, form.values.password)
+            console.log(r)
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     const handleEmailBlur = () => {
