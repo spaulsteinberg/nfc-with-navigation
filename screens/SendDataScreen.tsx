@@ -11,6 +11,7 @@ import { useAppDispatch } from '../state/redux/hooks';
 import { addLog } from '../state/redux/slices/logSlice';
 import { Timestamp } from 'firebase/firestore';
 import InteractiveForm, { validateInteractiveForm, ValidationResponse } from '../models/InteractiveForm';
+import TouchStatuses from '../components/send/TouchStatuses';
 
 // wait, vibrate, wait, ...
 const ERROR_PATTERN = [
@@ -36,6 +37,7 @@ const SendDataScreen = ({ route, navigation }: RootStackScreenProps<'SendData'>)
   const [requestLoading, setRequestLoading] = useState(false)
   const [requestError, setRequestError] = useState(false)
   const [requestSuccess, setRequestSuccess] = useState(false)
+  const [useTouchStatus, setUseTouchStatus] = useState(true)
   const dispatch = useAppDispatch()
 
   const [form, setForm] = useState<InteractiveForm>({
@@ -124,7 +126,11 @@ const SendDataScreen = ({ route, navigation }: RootStackScreenProps<'SendData'>)
     <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ backgroundColor: "#fff" }}>
       {
         !requestSuccess ?
-          <TableForm form={form} loading={requestLoading} error={requestError} number={route.params.data} handleChangeText={handleChangeText} handleSubmitPress={handleSubmitPress} />
+          (
+            <>
+              { useTouchStatus ? <TouchStatuses /> : <TableForm form={form} loading={requestLoading} error={requestError} number={route.params.data} handleChangeText={handleChangeText} handleSubmitPress={handleSubmitPress} /> }
+            </>
+          )
           : <FormSuccess number={route.params.data} />
       }
     </ScrollView>
