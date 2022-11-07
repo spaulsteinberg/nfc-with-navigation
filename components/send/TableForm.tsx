@@ -14,7 +14,7 @@ type TableFormProps = {
     loading: boolean;
     error:boolean;
     handleChangeText: (k: string, v:string) => void;
-    handleSubmitPress: () => void
+    handleSubmitPress: (a?: boolean, n?: string) => void
 }
 
 const MENU_ITEMS = [ TableStatus.Ready, TableStatus.Seated, TableStatus.Dirty, TableStatus.Cleaning ]
@@ -59,7 +59,7 @@ const TableForm: React.FC<TableFormProps> = ({ form, number, loading, error, han
                 <HelperText type="error" visible={form.errors.status !== "" && form.touched.status}>{form.errors.status}</HelperText>
             </View>
             <View>
-                <NFButton outerStyle={styles.buttonOuterView} title="Confirm" onPress={handleSubmitPress}>
+                <NFButton outerStyle={styles.buttonOuterView} title="Confirm" onPress={() => handleSubmitPress(false)}>
                     {loading ? <ActivityIndicator size="small" color={Colors.main.text} /> : null}
                 </NFButton>
             </View>
