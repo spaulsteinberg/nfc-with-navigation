@@ -11,14 +11,20 @@ type TouchStatusTileProps = {
 const TouchStatusTile = ({ status, color, width }: TouchStatusTileProps) => {
 
   const containerStyle = {
-    width: (width / 2) - 24,
-    height: 200,
     backgroundColor: color,
     marginHorizontal: 6
   }
+
+  const pressable:any = {
+    width: (width / 2) - 24,
+    height: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
+  
   return (
     <View style={[styles.container, containerStyle]}>
-        <Pressable>
+        <Pressable style={({ pressed }) => [ pressable, pressed && styles.pressed ]} android_ripple={{color: "#fff"}}>
             <Text style={styles.text}>{status}</Text>
         </Pressable>
     </View>
@@ -26,15 +32,17 @@ const TouchStatusTile = ({ status, color, width }: TouchStatusTileProps) => {
 }
 const styles = StyleSheet.create({
     container: {
-      width: '50%',
       marginBottom: 12,
       borderRadius: 5,
-      justifyContent: 'center',
-      alignItems: 'center'
+      overflow: 'hidden',
+      elevation: 2
     },
     text: {
       color: "#fff",
       fontSize: 30
+    },
+    pressed: {
+      opacity: 0.7
     }
 })
 
