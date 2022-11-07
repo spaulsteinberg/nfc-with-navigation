@@ -1,14 +1,22 @@
-import React from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native'
 import { TableStatus } from '../../constants/TableStatus'
 
 type TouchStatusTileProps = {
   status:TableStatus;
   color:string;
   width:number;
+  handleSubmit: (a?: boolean, n?: string) => Promise<void>;
+  loading: boolean;
 }
 
-const TouchStatusTile = ({ status, color, width }: TouchStatusTileProps) => {
+const TouchStatusTile = ({ status, color, width, handleSubmit, loading }: TouchStatusTileProps) => {
+
+  const [isTilePressed, setIsTilePressed] = useState(false)
+
+  useEffect(() => {
+    if (!loading) setIsTilePressed(false)
+  }, [loading])
 
   const containerStyle = {
     backgroundColor: color,
@@ -21,11 +29,18 @@ const TouchStatusTile = ({ status, color, width }: TouchStatusTileProps) => {
     justifyContent: 'center',
     alignItems: 'center',
   }
-  
+
+  const handlePress = async () => {
+    setIsTilePressed(true)
+    await handleSubmit(true, status.toString())
+  }
+
   return (
     <View style={[styles.container, containerStyle]}>
-        <Pressable style={({ pressed }) => [ pressable, pressed && styles.pressed ]} android_ripple={{color: "#fff"}}>
-            <Text style={styles.text}>{status}</Text>
+        <Pressable disabled={loading} onPress={handlePress} style={({ pressed }) => [ pressable, pressed && styles.pressed ]} android_ripple={{color: "#fff"}}>
+            {
+              loading && isTilePressed ? <ActivityIndicator size="large" color="#fff" /> : <Text style={styles.text}>{status}</Text>
+            }
         </Pressable>
     </View>
   )
