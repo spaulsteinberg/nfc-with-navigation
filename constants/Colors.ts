@@ -27,6 +27,7 @@ export default {
   },
   main: {
     text: "#fff",
-    background: "red"
-  }
+    background: "red",
+    nfc: "#0197f6"
+  },
 };
