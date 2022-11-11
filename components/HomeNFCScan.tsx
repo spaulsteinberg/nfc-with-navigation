@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import { ActivityIndicator, Pressable, StyleSheet, Text, useWindowDimensions, Vibration, View, Alert, Keyboard } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react'
+import { Pressable, StyleSheet, Text, useWindowDimensions, Vibration, View, Alert, Keyboard, Button } from 'react-native';
 import NfcManager, { NfcTech } from 'react-native-nfc-manager';
 import AnimatedViewOpacity from './AnimateViewOpacity'
 import { AntDesign } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
+import LottieView from 'lottie-react-native';
 
 type HomeNFCScanProps = {
   scanning: boolean;
@@ -17,6 +18,14 @@ const NFCErrorAlert = (title: string, message: string): void => Alert.alert(titl
 const HomeNFCScan: React.FC<HomeNFCScanProps> = ({ scanning, handleScanningPress, handleNavigateScreenOnSuccess }) => {
 
   const [showAnimate, setShowAnimate] = useState<boolean>(false)
+  const animationRef = useRef<LottieView>(null)
+
+  useEffect(() => {
+    if (scanning) {
+      animationRef.current?.play()
+      animationRef.current?.play(30, 115);
+    }
+  }, [scanning])
 
   const handleNfcReadPress = async () => {
     let success: boolean = false;
@@ -54,7 +63,7 @@ const HomeNFCScan: React.FC<HomeNFCScanProps> = ({ scanning, handleScanningPress
   const outerView: any = {
     flex: 1,
     justifyContent: 'center',
-    maxHeight: width > 320 ? 300 : 256,
+    maxHeight: width > 320 ? 320 : 256,
     minHeight: 256,
     width: width > 320 ? 300 : 256,
     marginVertical: width > 300 ? 24 : 0,
@@ -63,16 +72,20 @@ const HomeNFCScan: React.FC<HomeNFCScanProps> = ({ scanning, handleScanningPress
     <View style={styles.container}>
       <View style={outerView}>
         <Pressable style={styles.pressable} android_ripple={{ color: "#fff" }} onPress={handleNfcReadPress}>
+          {scanning && <Text style={{ color: "black", fontSize: 20, textAlign: 'center', paddingTop: 8 }}>Ready to Scan</Text>}
           <View style={styles.vContainer}>
             {
               scanning ?
-                <ActivityIndicator size="large" />
+                <LottieView
+                  source={require('../assets/json/phone.json')}
+                  ref={animationRef}
+                />
                 : showAnimate ? (
                   <AnimatedViewOpacity>
                     <AntDesign name="checkcircleo" size={96} color="#0197f6" />
-                    <Text style={[styles.text, styles.scanned]}>Scanned</Text>
+                    <Text style={[styles.text, styles.scanned]}>Scan Complete</Text>
                   </AnimatedViewOpacity>
-                ) : <Text style={styles.text}>Place phone near tag to scan</Text>
+                ) : <Text style={styles.text}>Tap to Begin</Text>
             }
           </View>
         </Pressable>
@@ -104,10 +117,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  scanned: { 
-    paddingTop: 12, 
-    fontSize: 18 
-  }
+  scanned: {
+    paddingTop: 12,
+    fontSize: 18
+  },
+  scanningText: {
+    color: "black",
+    fontSize: 20,
+    textAlign: 'center',
+    paddingTop: 8
+  },
 })
 
 export default HomeNFCScan
