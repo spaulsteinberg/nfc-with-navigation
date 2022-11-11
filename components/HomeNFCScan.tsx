@@ -3,6 +3,7 @@ import { ActivityIndicator, Pressable, StyleSheet, Text, useWindowDimensions, Vi
 import NfcManager, { NfcTech } from 'react-native-nfc-manager';
 import AnimatedViewOpacity from './AnimateViewOpacity'
 import { AntDesign } from '@expo/vector-icons';
+import Colors from '../constants/Colors';
 
 type HomeNFCScanProps = {
   scanning: boolean;
@@ -53,10 +54,10 @@ const HomeNFCScan: React.FC<HomeNFCScanProps> = ({ scanning, handleScanningPress
   const outerView: any = {
     flex: 1,
     justifyContent: 'center',
-    maxHeight: width > 320 ? 320 : 256,
+    maxHeight: width > 320 ? 300 : 256,
     minHeight: 256,
-    width: width > 320 ? 320 / HEIGHT_WIDTH_FACTOR : 256 / HEIGHT_WIDTH_FACTOR,
-    marginVertical: width > 320 ? 24 : 0
+    width: width > 320 ? 300 : 256,
+    marginVertical: width > 300 ? 24 : 0,
   }
   return (
     <View style={styles.container}>
@@ -68,10 +69,10 @@ const HomeNFCScan: React.FC<HomeNFCScanProps> = ({ scanning, handleScanningPress
                 <ActivityIndicator size="large" />
                 : showAnimate ? (
                   <AnimatedViewOpacity>
-                    <AntDesign name="checkcircle" size={96} color="green" />
+                    <AntDesign name="checkcircleo" size={96} color="#0197f6" />
+                    <Text style={[styles.text, styles.scanned]}>Scanned</Text>
                   </AnimatedViewOpacity>
-                ) :
-                  <Text style={styles.text}>Scan a tag to get started!</Text>
+                ) : <Text style={styles.text}>Place phone near tag to scan</Text>
             }
           </View>
         </Pressable>
@@ -88,18 +89,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   pressable: {
-    backgroundColor: 'lightblue',
     padding: 8,
-    borderRadius: 5,
+    borderRadius: 10,
     flex: 1,
+    borderColor: Colors.main.nfc,
+    borderWidth: 1,
   },
   text: {
-    color: 'white'
+    color: Colors.main.nfc,
+    textAlign: 'center'
   },
   vContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  scanned: { 
+    paddingTop: 12, 
+    fontSize: 18 
   }
 })
 
