@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Pressable, StyleSheet, Text, useWindowDimensions, Vibration, View, Alert, Keyboard, Button } from 'react-native';
+import { Pressable, StyleSheet, Text, useWindowDimensions, Vibration, View, Alert, Keyboard } from 'react-native';
 import NfcManager, { NfcTech } from 'react-native-nfc-manager';
 import AnimatedViewOpacity from './AnimateViewOpacity'
 import { AntDesign } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 import LottieView from 'lottie-react-native';
+import { Button } from 'react-native-paper';
 
 type HomeNFCScanProps = {
   scanning: boolean;
   handleScanningPress: (d: boolean) => void;
   handleNavigateScreenOnSuccess: (d: any) => void
 }
-const HEIGHT_WIDTH_FACTOR = 1.78
 
 const NFCErrorAlert = (title: string, message: string): void => Alert.alert(title, message, [{ text: 'OK', onPress: () => Keyboard.dismiss() }])
 
@@ -30,11 +30,17 @@ const HomeNFCScan: React.FC<HomeNFCScanProps> = ({ scanning, handleScanningPress
   const handleNfcReadPress = async () => {
     let success: boolean = false;
     let data: any = null
+    handleScanningPress(true)
+
     try {
-      handleScanningPress(true)
       await NfcManager.requestTechnology(NfcTech.Ndef)
+    } catch (err) {
+      handleScanningPress(false)
+      return await NfcManager.cancelTechnologyRequest()
+    }
+
+    try {
       const tag = await NfcManager.getTag()
-      console.log("TAG FOUND!", tag)
       if (!tag) return NFCErrorAlert("Could not read NFC Tag", "Please make sure the tag is within 4-10 cm of your phone.")
       console.log(String.fromCharCode(...tag.ndefMessage[0].payload))
       data = String.fromCharCode(...tag.ndefMessage[0].payload)
@@ -44,9 +50,8 @@ const HomeNFCScan: React.FC<HomeNFCScanProps> = ({ scanning, handleScanningPress
       console.error(err)
       return NFCErrorAlert("Could not read NFC Tag", "Please make the NFC tag has not been corrupted.")
     } finally {
-      console.log("finally!")
+      await NfcManager.cancelTechnologyRequest()
       handleScanningPress(false)
-      NfcManager.cancelTechnologyRequest()
     }
 
     if (success) {
@@ -56,6 +61,10 @@ const HomeNFCScan: React.FC<HomeNFCScanProps> = ({ scanning, handleScanningPress
         setShowAnimate(false)
       }, 2000)
     }
+  }
+
+  const handleCancelPress = async () => {
+    await NfcManager.cancelTechnologyRequest()
   }
 
   const { width } = useWindowDimensions()
@@ -68,10 +77,11 @@ const HomeNFCScan: React.FC<HomeNFCScanProps> = ({ scanning, handleScanningPress
     width: width > 320 ? 300 : 256,
     marginVertical: width > 300 ? 24 : 0,
   }
+
   return (
     <View style={styles.container}>
       <View style={outerView}>
-        <Pressable style={styles.pressable} android_ripple={{ color: "#fff" }} onPress={handleNfcReadPress}>
+        <Pressable style={styles.pressable} android_ripple={{ color: "#fff" }} onPress={handleNfcReadPress} disabled={scanning || showAnimate}>
           {scanning && <Text style={{ color: "black", fontSize: 20, textAlign: 'center', paddingTop: 8 }}>Ready to Scan</Text>}
           <View style={styles.vContainer}>
             {
@@ -82,12 +92,13 @@ const HomeNFCScan: React.FC<HomeNFCScanProps> = ({ scanning, handleScanningPress
                 />
                 : showAnimate ? (
                   <AnimatedViewOpacity>
-                    <AntDesign name="checkcircleo" size={96} color="#0197f6" />
+                    <AntDesign name="checkcircleo" size={96} color="#0197f6" style={{textAlign: 'center'}} />
                     <Text style={[styles.text, styles.scanned]}>Scan Complete</Text>
                   </AnimatedViewOpacity>
                 ) : <Text style={styles.text}>Tap to Begin</Text>
             }
           </View>
+          { scanning && <Button textColor='black' style={styles.cancelButton} onPress={handleCancelPress}>Cancel</Button> }
         </Pressable>
       </View>
     </View>
@@ -99,7 +110,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   pressable: {
     padding: 8,
@@ -127,6 +138,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingTop: 8
   },
+  cancelButton: {
+    borderWidth: .5,
+    color: 'black',
+    backgroundColor: 'lightgray',
+    marginBottom: 8
+  }
 })
 
 export default HomeNFCScan
